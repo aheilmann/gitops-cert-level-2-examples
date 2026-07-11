@@ -5,23 +5,23 @@ metadata:
   namespace: argocd
 spec:
   generators:
-  - git:
-      repoURL: https://github.com/codefresh-contrib/gitops-cert-level-2-examples.git
-      revision: HEAD
-      directories:
-      - path: environment-promotion/*
+  - list:
+      elements:
+      - namespace: qa
+      - namespace: staging
+      - namespace: prod
   template:
     metadata:
-      name: '{{path.basename}}'
+      path: ./application-sets/my-application-sets/env-promotion.yml
     spec:
       # The project the application belongs to.
       project: default
 
       # Source of the application manifests
       source:
-        repoURL: https://github.com/codefresh-contrib/gitops-cert-level-2-examples.git
+        repoURL: https://github.com/aheilmann/gitops-cert-level-2-examples.git
         targetRevision: HEAD
-        path: '{{path}}'
+        path: '{{metadata.path}}'
 
       # Destination cluster and namespace to deploy the application
       destination:
